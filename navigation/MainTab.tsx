@@ -35,7 +35,7 @@ function AccountScreen() {
 function MainTab() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Home" component={Home} options={{}} />
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>
   );

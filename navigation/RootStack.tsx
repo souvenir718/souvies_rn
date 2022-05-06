@@ -3,7 +3,6 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
-import Home from '../screens/Home';
 import Detail from '../screens/Detail';
 import MainTab, {MainTabNavigationScreenParams} from './MainTab';
 
