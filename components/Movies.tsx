@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {RootStackNavigationProp} from '../navigation/RootStack';
 import {cutStr} from '../utils';
+import Loading from './Loading';
 
 type Props = {
   genre: string;
@@ -18,14 +19,10 @@ type Props = {
 
 type Movie = {
   id: number;
-  url: string;
   title: string;
   year: number;
-  runtime: number;
-  genre: string[];
-  summary: string;
   large_cover_image: string;
-  date_uploaded: string;
+  rating: number;
 };
 
 export default function Movies({genre}: Props) {
@@ -39,7 +36,9 @@ export default function Movies({genre}: Props) {
 
   const getMovies = useCallback(() => {
     axios
-      .get(`https://yts.mx/api/v2/list_movies.json?limit=10&genre=${genre}`)
+      .get(
+        `https://yts.mx/api/v2/list_movies.json?limit=10&genre=${genre}&sort_by=rating&order_by=desc`,
+      )
       .then(({data}) => {
         setMovies(data.data.movies);
         setLoading(true);
@@ -52,20 +51,17 @@ export default function Movies({genre}: Props) {
   }, [getMovies]);
 
   if (!loading) {
-    return (
-      <View>
-        <Text style={styles.loading}>Loading...</Text>
-      </View>
-    );
+    return <Loading />;
   }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{genre.toUpperCase()} Movie List</Text>
       <View style={styles.movies_container}>
         <ScrollView horizontal={true}>
-          {movies.map(movie => (
+          {movies.map((movie, idx) => (
             <TouchableOpacity onPress={() => goDetail(movie.id)} key={movie.id}>
               <View style={styles.movie_container}>
+                <Text style={styles.movie_rank}>{idx + 1}</Text>
                 <Image
                   style={styles.thumnail}
                   source={{
@@ -104,12 +100,25 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
+  },
+  movie_rank: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '700',
+    zIndex: 3,
+    elevation: 3,
+    paddingHorizontal: 2,
+    backgroundColor: 'grey',
   },
   movie_title: {
     color: 'black',
   },
   thumnail: {
-    height: 200,
+    height: 225,
     width: 150,
   },
 });
