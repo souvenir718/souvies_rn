@@ -1,23 +1,16 @@
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {RootStackNavigationProp} from '../navigation/RootStack';
-import {cutStr} from '../utils';
 import Loading from './Loading';
+import MovieItem from './MovieItem';
 
 type Props = {
   genre: string;
 };
 
-type Movie = {
+export type Movie = {
   id: number;
   title: string;
   year: number;
@@ -59,18 +52,12 @@ export default function Movies({genre}: Props) {
       <View style={styles.movies_container}>
         <ScrollView horizontal={true}>
           {movies.map((movie, idx) => (
-            <TouchableOpacity onPress={() => goDetail(movie.id)} key={movie.id}>
-              <View style={styles.movie_container}>
-                <Text style={styles.movie_rank}>{idx + 1}</Text>
-                <Image
-                  style={styles.thumnail}
-                  source={{
-                    uri: `${movie.large_cover_image}`,
-                  }}
-                />
-                <Text style={styles.movie_title}>{cutStr(movie.title)}</Text>
-              </View>
-            </TouchableOpacity>
+            <MovieItem
+              movie={movie}
+              goDetail={goDetail}
+              idx={idx}
+              key={movie.id}
+            />
           ))}
         </ScrollView>
       </View>
@@ -81,11 +68,7 @@ export default function Movies({genre}: Props) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-  },
-  loading: {
-    color: 'black',
-    textAlign: 'center',
-    fontSize: 20,
+    height: 300,
   },
   title: {
     color: 'black',
@@ -95,30 +78,5 @@ const styles = StyleSheet.create({
   },
   movies_container: {
     height: 250,
-  },
-  movie_container: {
-    marginRight: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  movie_rank: {
-    position: 'absolute',
-    top: 5,
-    left: 5,
-    color: 'white',
-    fontSize: 18,
-    fontWeight: '700',
-    zIndex: 3,
-    elevation: 3,
-    paddingHorizontal: 2,
-    backgroundColor: 'grey',
-  },
-  movie_title: {
-    color: 'black',
-  },
-  thumnail: {
-    height: 225,
-    width: 150,
   },
 });

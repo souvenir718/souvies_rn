@@ -8,8 +8,8 @@ export default function Home({}: Props) {
   return (
     <ScrollView style={styles.container}>
       <Movies genre={'romance'} />
-      {/* <Movies genre={'comedy'} />
-      <Movies genre={'fantasy'} /> */}
+      <Movies genre={'comedy'} />
+      <Movies genre={'animation'} />
     </ScrollView>
   );
 }

@@ -10,10 +10,11 @@ import {
 } from '@react-navigation/native';
 import {RootStackNavigationProp} from './RootStack';
 import {Text, View} from 'react-native';
+import Bookmark from '../screens/Bookmark';
 
 type MainTabParamList = {
   Home: undefined;
-  Account: undefined;
+  Bookmark: undefined;
 };
 export type MainTabNavigtaionProp = CompositeNavigationProp<
   RootStackNavigationProp,
@@ -24,19 +25,11 @@ export type MainTabNavigationScreenParams =
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-function AccountScreen() {
-  return (
-    <View>
-      <Text>Account</Text>
-    </View>
-  );
-}
-
 function MainTab() {
   return (
     <Tab.Navigator initialRouteName="Home">
-      <Tab.Screen name="Home" component={Home} options={{}} />
-      <Tab.Screen name="Account" component={AccountScreen} />
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Bookmark" component={Bookmark} />
     </Tab.Navigator>
   );
 }

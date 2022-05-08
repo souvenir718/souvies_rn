@@ -12,10 +12,14 @@ import {RootStackParamList} from '../navigation/RootStack';
 import axios from 'axios';
 import {MovieDetail} from '../types';
 import Loading from '../components/Loading';
+import {Observer} from 'mobx-react';
+import movieStore from '../stores/movie';
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'Detail'>;
 
-export default function Detail() {
+const Detail = () => {
+  const {setBookmarkList, bookmarkList} = movieStore;
+
   const {
     params: {id},
   } = useRoute<DetailScreenRouteProp>();
@@ -33,14 +37,25 @@ export default function Detail() {
       });
   }, [id]);
 
-  const onPress = () => {
+  const onPress = (_movie: MovieDetail) => {
+    setBookmarkList(_movie, !check);
     setCheck(prevCheck => !prevCheck);
   };
+
+  const checkBookmarkList = useCallback(() => {
+    const result = bookmarkList.some(item => item.id === id);
+    if (result) {
+      setCheck(true);
+    }
+  }, [bookmarkList, id]);
 
   useEffect(() => {
     getMovie();
   }, [getMovie]);
 
+  useEffect(() => {
+    checkBookmarkList();
+  }, [checkBookmarkList, bookmarkList, id]);
   if (!loading) {
     return <Loading />;
   }
@@ -60,14 +75,20 @@ export default function Detail() {
             <Text style={styles.info_year}>{movie?.year}</Text>
           </View>
           <Text style={styles.info_genre}>{movie?.genres.join('・')}</Text>
-          <TouchableOpacity style={styles.bookmark} onPress={onPress}>
-            <Text style={styles.bookmark_btn}>{check ? '💖' : '🤍'}</Text>
-          </TouchableOpacity>
+          <Observer
+            render={() => (
+              <TouchableOpacity
+                style={styles.bookmark}
+                onPress={() => (movie ? onPress(movie) : undefined)}>
+                <Text style={styles.bookmark_btn}>{check ? '💖' : '🤍'}</Text>
+              </TouchableOpacity>
+            )}
+          />
         </View>
       </View>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -117,3 +138,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+export default Detail;
