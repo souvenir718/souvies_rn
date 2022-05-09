@@ -1,5 +1,6 @@
 import {makeAutoObservable} from 'mobx';
 import {MovieDetail} from '../types';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class Movie {
   bookmarkList: MovieDetail[] = [];
@@ -15,6 +16,19 @@ class Movie {
       const updateList = this.bookmarkList.filter(item => item.id !== movie.id);
       this.bookmarkList = updateList;
     }
+    AsyncStorage.setItem('bookmark', JSON.stringify(this.bookmarkList));
+  };
+
+  loadStorage = () => {
+    AsyncStorage.getItem('bookmark', async (error, result) => {
+      if (error) {
+        console.log(error);
+      } else {
+        if (typeof result === 'string') {
+          console.log(JSON.parse(result).length);
+        }
+      }
+    });
   };
 
   deleteBookmark = (id: number) => {
