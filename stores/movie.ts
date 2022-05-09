@@ -1,4 +1,4 @@
-import {makeAutoObservable} from 'mobx';
+import {makeAutoObservable, runInAction} from 'mobx';
 import {MovieDetail} from '../types';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -25,7 +25,10 @@ class Movie {
         console.log(error);
       } else {
         if (typeof result === 'string') {
-          console.log(JSON.parse(result).length);
+          const loadList = <MovieDetail[]>JSON.parse(result);
+          runInAction(() => {
+            this.bookmarkList = loadList;
+          });
         }
       }
     });
