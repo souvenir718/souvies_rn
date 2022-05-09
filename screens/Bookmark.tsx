@@ -1,5 +1,5 @@
 import {Observer} from 'mobx-react';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -14,22 +14,44 @@ import movieStore from '../stores/movie';
 type Props = {};
 
 export default function Bookmark({}: Props) {
-  const {bookmarkList} = movieStore;
+  const {bookmarkList, deleteBookmark, setComment} = movieStore;
+  const [text, setText] = useState<string>('');
+
+  const writeComment = (id: number) => {
+    setComment(id, text);
+    setText('');
+  };
+  const deleteItem = (id: number) => {
+    deleteBookmark(id);
+  };
+
+  useEffect(() => {
+    console.log(bookmarkList);
+  }, [bookmarkList]);
+
   return (
-    <ScrollView style={styles.container}>
-      <Observer
-        render={() => (
+    <Observer
+      render={() => (
+        <ScrollView style={styles.container}>
           <View style={styles.bookmarks_container}>
             {bookmarkList.map(bookmark => (
               <View style={styles.bookmark_container} key={bookmark.id}>
+                <TouchableOpacity
+                  style={styles.cancel}
+                  onPress={() => deleteItem(bookmark.id)}>
+                  <Text style={styles.cancel_btn}>❌</Text>
+                </TouchableOpacity>
+
                 <Image
                   style={styles.thumnail}
                   source={{uri: `${bookmark.large_cover_image}`}}
                 />
                 <View style={styles.info_container}>
-                  <Text style={styles.info}>{bookmark.title}</Text>
+                  <Text style={[styles.info, styles.title]}>
+                    {bookmark.title}
+                  </Text>
                   <Text style={styles.info}>
-                    ⭐ {bookmark.rating}・{bookmark.runtime}
+                    ⭐ {bookmark.rating}・{bookmark.runtime}분
                   </Text>
                   {!bookmark.isComment ? (
                     <View style={styles.input_container}>
@@ -37,21 +59,25 @@ export default function Bookmark({}: Props) {
                         style={styles.input}
                         placeholder="comment!"
                         placeholderTextColor="rgba(0,0,0,0.5)"
+                        value={text}
+                        onChangeText={setText}
                       />
-                      <TouchableOpacity style={styles.input_btn_container}>
+                      <TouchableOpacity
+                        style={styles.input_btn_container}
+                        onPress={() => writeComment(bookmark.id)}>
                         <Text style={styles.input_btn}>입력</Text>
                       </TouchableOpacity>
                     </View>
                   ) : (
-                    <Text>{bookmark.comment}</Text>
+                    <Text style={styles.comment}>{bookmark.comment}</Text>
                   )}
                 </View>
               </View>
             ))}
           </View>
-        )}
-      />
-    </ScrollView>
+        </ScrollView>
+      )}
+    />
   );
 }
 
@@ -64,8 +90,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   bookmark_container: {
+    position: 'relative',
+    borderRadius: 3,
+    padding: 5,
+    backgroundColor: '#66bdf7e6',
     marginBottom: 10,
     flexDirection: 'row',
+  },
+  cancel: {
+    position: 'absolute',
+    top: 10,
+    right: 15,
+  },
+  cancel_btn: {
+    fontSize: 18,
   },
   thumnail: {
     width: '35%',
@@ -78,8 +116,11 @@ const styles = StyleSheet.create({
   },
   info: {
     color: 'black',
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: 8,
+  },
+  title: {
+    fontWeight: '700',
   },
   input_container: {
     flexDirection: 'row',
@@ -90,21 +131,25 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     paddingVertical: 4,
-    width: 160,
+    flex: 3,
     paddingLeft: 10,
-    borderRadius: 6,
     borderColor: 'rgba(0,0,0,0.5)',
     borderWidth: 1,
   },
   input_btn_container: {
-    width: 50,
+    flex: 1,
     height: 40,
     backgroundColor: 'blue',
-    borderRadius: 6,
     justifyContent: 'center',
     alignItems: 'center',
   },
   input_btn: {
     color: 'white',
+  },
+  comment: {
+    color: 'black',
+    fontSize: 18,
+    marginTop: 10,
+    fontStyle: 'italic',
   },
 });

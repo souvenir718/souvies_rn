@@ -1,25 +1,3 @@
-// import {observable} from 'mobx';
-// import {MovieDetail} from '../types';
-
-// interface Movie {
-//   bookMarkList: MovieDetail[];
-//   setBookMarkList: (movie: MovieDetail, check: boolean) => void;
-// }
-
-// export const movieStore = observable<Movie>({
-//   bookMarkList: [],
-
-//   setBookMarkList(movie, check) {
-//     if (check) {
-//       this.bookMarkList = [...this.bookMarkList, movie];
-//     } else {
-//       this.bookMarkList = this.bookMarkList.filter(
-//         item => item.id !== movie.id,
-//       );
-//     }
-//   },
-// });
-
 import {makeAutoObservable} from 'mobx';
 import {MovieDetail} from '../types';
 
@@ -32,17 +10,23 @@ class Movie {
 
   setBookmarkList = (movie: MovieDetail, check: boolean) => {
     if (check) {
-      this.bookmarkList.push(movie);
+      this.bookmarkList.push({...movie, comment: '', isComment: false});
     } else {
-      this.bookmarkList = this.bookmarkList.filter(
-        item => item.id !== movie.id,
-      );
+      const updateList = this.bookmarkList.filter(item => item.id !== movie.id);
+      this.bookmarkList = updateList;
     }
   };
 
+  deleteBookmark = (id: number) => {
+    const updateList = this.bookmarkList.filter(item => item.id !== id);
+    this.bookmarkList = updateList;
+  };
+
   setComment = (id: number, comment: string) => {
-    const newItem = this.bookmarkList.find(item => item.id === id);
-    console.log(newItem, comment);
+    const updateList = this.bookmarkList.map(item =>
+      item.id === id ? {...item, comment, isComment: true} : item,
+    );
+    this.bookmarkList = updateList;
   };
 }
 
