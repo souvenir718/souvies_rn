@@ -9,8 +9,8 @@ import {
   NavigatorScreenParams,
 } from '@react-navigation/native';
 import {RootStackNavigationProp} from './RootStack';
-import {Text, View} from 'react-native';
 import Bookmark from '../screens/Bookmark';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type MainTabParamList = {
   Home: undefined;
@@ -28,8 +28,26 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 function MainTab() {
   return (
     <Tab.Navigator initialRouteName="Home">
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Bookmark" component={Bookmark} />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          title: 'Home',
+          tabBarIcon: ({color, size}) => (
+            <Icon name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Bookmark"
+        component={Bookmark}
+        options={{
+          title: 'Bookmark',
+          tabBarIcon: ({color, size}) => (
+            <Icon name="bookmark" color={color} size={size} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }

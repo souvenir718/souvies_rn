@@ -12,12 +12,12 @@ import {RootStackParamList} from '../navigation/RootStack';
 import axios from 'axios';
 import {MovieDetail} from '../types';
 import Loading from '../components/Loading';
-import {Observer} from 'mobx-react';
+import {Observer, observer} from 'mobx-react';
 import movieStore from '../stores/movie';
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'Detail'>;
 
-const Detail = () => {
+function Detail() {
   const {setBookmarkList, bookmarkList} = movieStore;
 
   const {
@@ -75,20 +75,17 @@ const Detail = () => {
             <Text style={styles.info_year}>{movie?.year}</Text>
           </View>
           <Text style={styles.info_genre}>{movie?.genres.join('・')}</Text>
-          <Observer
-            render={() => (
-              <TouchableOpacity
-                style={styles.bookmark}
-                onPress={() => (movie ? onPress(movie) : undefined)}>
-                <Text style={styles.bookmark_btn}>{check ? '💖' : '🤍'}</Text>
-              </TouchableOpacity>
-            )}
-          />
+
+          <TouchableOpacity
+            style={styles.bookmark}
+            onPress={() => (movie ? onPress(movie) : undefined)}>
+            <Text style={styles.bookmark_btn}>{check ? '💖' : '🤍'}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -139,4 +136,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Detail;
+export default observer(Detail);

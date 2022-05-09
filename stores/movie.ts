@@ -18,7 +18,6 @@ class Movie {
   };
 
   deleteBookmark = (id: number) => {
-    console.log('Store ', id);
     const updateList = this.bookmarkList.filter(item => item.id !== id);
     this.bookmarkList = updateList;
   };
