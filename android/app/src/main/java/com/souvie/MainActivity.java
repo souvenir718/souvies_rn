@@ -3,6 +3,8 @@ package com.souvie;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import org.devio.rn.splashscreen.SplashScreen;
+import android.os.Bundle;
 
 public class MainActivity extends ReactActivity {
 
@@ -14,6 +16,11 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "souvie";
   }
+  @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this);
+        super.onCreate(savedInstanceState);
+    }
 
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. There the RootView is created and

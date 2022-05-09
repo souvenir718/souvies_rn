@@ -14,7 +14,7 @@ import movieStore from '../stores/movie';
 type Props = {};
 
 export default function Bookmark({}: Props) {
-  const {bookmarkList, deleteBookmark, setComment} = movieStore;
+  const {bookmarkList, deleteBookmark, setComment, toggleComment} = movieStore;
   const [text, setText] = useState<string>('');
 
   const writeComment = (id: number) => {
@@ -22,11 +22,16 @@ export default function Bookmark({}: Props) {
     setText('');
   };
   const deleteItem = (id: number) => {
+    console.log('Bookmark ', id);
     deleteBookmark(id);
+  };
+  const modifyComment = (id: number, comment: string) => {
+    setText(comment);
+    toggleComment(id);
   };
 
   useEffect(() => {
-    console.log(bookmarkList);
+    console.log(bookmarkList.length);
   }, [bookmarkList]);
 
   return (
@@ -69,7 +74,16 @@ export default function Bookmark({}: Props) {
                       </TouchableOpacity>
                     </View>
                   ) : (
-                    <Text style={styles.comment}>{bookmark.comment}</Text>
+                    <View style={styles.comment_container}>
+                      <Text style={styles.comment}>{bookmark.comment}</Text>
+                      <TouchableOpacity
+                        style={styles.comment_modify}
+                        onPress={() =>
+                          modifyComment(bookmark.id, bookmark.comment)
+                        }>
+                        <Text>수정</Text>
+                      </TouchableOpacity>
+                    </View>
                   )}
                 </View>
               </View>
@@ -146,10 +160,23 @@ const styles = StyleSheet.create({
   input_btn: {
     color: 'white',
   },
+  comment_container: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   comment: {
     color: 'black',
     fontSize: 18,
-    marginTop: 10,
     fontStyle: 'italic',
+    flex: 6,
+  },
+  comment_modify: {
+    backgroundColor: 'black',
+    marginLeft: 10,
+    padding: 5,
+    borderRadius: 5,
+    flex: 1,
+    textAlign: 'center',
   },
 });

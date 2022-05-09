@@ -18,6 +18,7 @@ class Movie {
   };
 
   deleteBookmark = (id: number) => {
+    console.log('Store ', id);
     const updateList = this.bookmarkList.filter(item => item.id !== id);
     this.bookmarkList = updateList;
   };
@@ -25,6 +26,13 @@ class Movie {
   setComment = (id: number, comment: string) => {
     const updateList = this.bookmarkList.map(item =>
       item.id === id ? {...item, comment, isComment: true} : item,
+    );
+    this.bookmarkList = updateList;
+  };
+
+  toggleComment = (id: number) => {
+    const updateList = this.bookmarkList.map(item =>
+      item.id === id ? {...item, isComment: !item.isComment} : item,
     );
     this.bookmarkList = updateList;
   };
