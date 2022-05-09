@@ -9,4 +9,5 @@ export type MovieDetail = {
   runtime: number;
   comment: string;
   isComment: boolean;
+  url: string;
 };

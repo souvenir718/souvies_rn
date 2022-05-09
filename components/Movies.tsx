@@ -33,7 +33,15 @@ export default function Movies({genre}: Props) {
         `https://yts.mx/api/v2/list_movies.json?limit=10&genre=${genre}&sort_by=rating&order_by=desc`,
       )
       .then(({data}) => {
-        setMovies(data.data.movies);
+        let movieList = data.data.movies;
+        if (movieList[0].rating === 0) {
+          movieList.sort(function (a: Movie, b: Movie) {
+            return b.year - a.year;
+          });
+          setMovies(movieList);
+        } else {
+          setMovies(movieList);
+        }
         setLoading(true);
       })
       .catch(err => console.log(err));

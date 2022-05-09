@@ -2,6 +2,7 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,7 +13,7 @@ import {RootStackParamList} from '../navigation/RootStack';
 import axios from 'axios';
 import {MovieDetail} from '../types';
 import Loading from '../components/Loading';
-import {Observer, observer} from 'mobx-react';
+import {observer} from 'mobx-react';
 import movieStore from '../stores/movie';
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'Detail'>;
@@ -63,16 +64,19 @@ function Detail() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header_container}>
-        <Image
-          style={styles.poster}
-          source={{uri: `${movie?.large_cover_image}`}}
-        />
+        <TouchableOpacity
+          onPress={() => (movie ? Linking.openURL(movie?.url) : undefined)}>
+          <Image
+            style={styles.poster}
+            source={{uri: `${movie?.large_cover_image}`}}
+          />
+        </TouchableOpacity>
         <View style={styles.movie_info}>
           <Text style={styles.info_title}>{movie?.title}</Text>
           <View style={styles.sub_container}>
             <Text style={styles.info_rating}>⭐ {movie?.rating}</Text>
             <Text style={styles.info_rating}>・</Text>
-            <Text style={styles.info_year}>{movie?.year}</Text>
+            <Text style={styles.info_year}>{movie?.year}년</Text>
           </View>
           <Text style={styles.info_genre}>{movie?.genres.join('・')}</Text>
 

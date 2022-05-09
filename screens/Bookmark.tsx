@@ -53,7 +53,7 @@ function Bookmark({}: Props) {
                 <View style={styles.input_container}>
                   <TextInput
                     style={styles.input}
-                    placeholder="comment!"
+                    placeholder="comment here!"
                     placeholderTextColor="rgba(0,0,0,0.5)"
                     value={text}
                     onChangeText={setText}
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   input: {
     color: 'black',
-    fontSize: 16,
+    fontSize: 14,
     paddingVertical: 4,
     flex: 3,
     paddingLeft: 10,
