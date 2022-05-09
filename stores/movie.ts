@@ -16,16 +16,16 @@ class Movie {
       const updateList = this.bookmarkList.filter(item => item.id !== movie.id);
       this.bookmarkList = updateList;
     }
-    AsyncStorage.setItem('bookmark', JSON.stringify(this.bookmarkList));
+    this.setStorage(this.bookmarkList);
   };
 
-  loadStorage = () => {
-    AsyncStorage.getItem('bookmark', async (error, result) => {
+  loadStorage = async () => {
+    await AsyncStorage.getItem('bookmark', (error, result) => {
       if (error) {
         console.log(error);
       } else {
         if (typeof result === 'string') {
-          const loadList = <MovieDetail[]>JSON.parse(result);
+          const loadList: MovieDetail[] = <MovieDetail[]>JSON.parse(result);
           runInAction(() => {
             this.bookmarkList = loadList;
           });
@@ -37,6 +37,7 @@ class Movie {
   deleteBookmark = (id: number) => {
     const updateList = this.bookmarkList.filter(item => item.id !== id);
     this.bookmarkList = updateList;
+    this.setStorage(this.bookmarkList);
   };
 
   setComment = (id: number, comment: string) => {
@@ -44,6 +45,7 @@ class Movie {
       item.id === id ? {...item, comment, isComment: true} : item,
     );
     this.bookmarkList = updateList;
+    this.setStorage(this.bookmarkList);
   };
 
   toggleComment = (id: number) => {
@@ -51,6 +53,11 @@ class Movie {
       item.id === id ? {...item, isComment: !item.isComment} : item,
     );
     this.bookmarkList = updateList;
+    this.setStorage(this.bookmarkList);
+  };
+
+  setStorage = (newList: MovieDetail[]) => {
+    AsyncStorage.setItem('bookmark', JSON.stringify(newList));
   };
 }
 
