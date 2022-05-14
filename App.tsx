@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import RootStack from './navigation/RootStack';
+import RootStack from './src/navigation/RootStack';
 import SplashScreen from 'react-native-splash-screen';
 import {StatusBar} from 'react-native';
 

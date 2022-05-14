@@ -9,12 +9,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {RootStackParamList} from '../navigation/RootStack';
 import axios from 'axios';
 import {MovieDetail} from '../types';
 import Loading from '../components/Loading';
 import {observer} from 'mobx-react';
 import movieStore from '../stores/movie';
+import {RootStackParamList} from '../navigation/RootStack';
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'Detail'>;
 
