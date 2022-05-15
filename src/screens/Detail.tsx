@@ -13,13 +13,13 @@ import axios from 'axios';
 import {MovieDetail} from '../types';
 import Loading from '../components/Loading';
 import {observer} from 'mobx-react';
-import movieStore from '../stores/movie';
 import {RootStackParamList} from '../navigation/RootStack';
+import bookmarkStore from '../stores/bookmark';
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'Detail'>;
 
 function Detail() {
-  const {setBookmarkList, bookmarkList} = movieStore;
+  const {bookmarkList, setBookmarkList} = bookmarkStore;
 
   const {
     params: {id},

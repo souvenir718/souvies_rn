@@ -2,17 +2,22 @@ import {observer} from 'mobx-react';
 import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import BookmarkItem from '../components/BookmarkItem';
-import movieStore from '../stores/movie';
+import bookmarkStore from '../stores/bookmark';
 
 type Props = {};
 
 function Bookmark({}: Props) {
-  const {bookmarkList, deleteBookmark, setComment, toggleComment, loadStorage} =
-    movieStore;
+  const {
+    bookmarkList,
+    loadBookmarkList,
+    deleteBookmark,
+    setComment,
+    toggleComment,
+  } = bookmarkStore;
 
   useEffect(() => {
-    loadStorage();
-  }, [bookmarkList, loadStorage]);
+    loadBookmarkList();
+  }, [loadBookmarkList]);
 
   if (bookmarkList.length === 0) {
     return (

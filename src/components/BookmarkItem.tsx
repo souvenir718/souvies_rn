@@ -12,9 +12,9 @@ import {MovieDetail} from '../types';
 
 type Props = {
   bookmark: MovieDetail;
-  setComment: (id: number, text: string) => void;
-  deleteBookmark: (id: number) => void;
-  toggleComment: (id: number) => void;
+  setComment: (movie: MovieDetail, text: string) => void;
+  deleteBookmark: (movie: MovieDetail) => void;
+  toggleComment: (movie: MovieDetail) => void;
 };
 
 function BookmarkItem({
@@ -30,17 +30,17 @@ function BookmarkItem({
       Alert.alert('내용을 입력해주세요!');
       return;
     }
-    setComment(bookmark.id, text);
+    setComment(bookmark, text);
     setText('');
   };
 
   const modifyComment = () => {
     setText(bookmark.comment);
-    toggleComment(bookmark.id);
+    toggleComment(bookmark);
   };
 
   const deleteItem = () => {
-    deleteBookmark(bookmark.id);
+    deleteBookmark(bookmark);
   };
 
   return (
