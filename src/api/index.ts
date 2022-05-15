@@ -19,3 +19,11 @@ export const getMovies = async (genre: string) => {
     })
     .catch(err => console.log(err));
 };
+
+export const getMovie = async (id: number) => {
+  return axios
+    .get(`https://yts.mx/api/v2/movie_details.json?movie_id=${id}`)
+    .then(({data}) => {
+      return data.data.movie;
+    });
+};
