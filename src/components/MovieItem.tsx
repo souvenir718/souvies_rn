@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {cutStr} from '../utils';
+import {omitTitle} from '../utils';
 import {Movie} from './Movies';
 
 type Props = {
@@ -20,7 +20,7 @@ export default function MovieItem({movie, goDetail, idx}: Props) {
             uri: `${movie.large_cover_image}`,
           }}
         />
-        <Text style={styles.movie_title}>{cutStr(movie.title)}</Text>
+        <Text style={styles.movie_title}>{omitTitle(movie.title)}</Text>
       </View>
     </TouchableOpacity>
   );
