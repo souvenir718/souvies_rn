@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {RootStackNavigationProp} from '../navigation/RootStack';
+import {YTSMovieList} from '../types';
 import Loading from './Loading';
 import MovieItem from './MovieItem';
 
@@ -10,16 +11,8 @@ type Props = {
   genre: string;
 };
 
-export type Movie = {
-  id: number;
-  title: string;
-  year: number;
-  large_cover_image: string;
-  rating: number;
-};
-
 export default function Movies({genre}: Props) {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<YTSMovieList[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -35,7 +28,7 @@ export default function Movies({genre}: Props) {
       .then(({data}) => {
         let movieList = data.data.movies;
         if (movieList[0].rating === 0) {
-          movieList.sort(function (a: Movie, b: Movie) {
+          movieList.sort(function (a: YTSMovieList, b: YTSMovieList) {
             return b.year - a.year;
           });
           setMovies(movieList);
