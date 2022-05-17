@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
-import axios from 'axios';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {getMovies} from '../api';
 import {RootStackNavigationProp} from '../navigation/RootStack';
 import {YTSMovieList} from '../types';
 import Loading from './Loading';
@@ -14,39 +14,33 @@ type Props = {
 export default function Movies({genre}: Props) {
   const [movies, setMovies] = useState<YTSMovieList[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
   const navigation = useNavigation<RootStackNavigationProp>();
-  const goDetail = (id: number) => {
-    navigation.navigate('Detail', {id: id});
-  };
 
-  const getMovies = useCallback(() => {
-    axios
-      .get(
-        `https://yts.mx/api/v2/list_movies.json?limit=10&genre=${genre}&sort_by=rating&order_by=desc`,
-      )
-      .then(({data}) => {
-        let movieList = data.data.movies;
-        if (movieList[0].rating === 0) {
-          movieList.sort(function (a: YTSMovieList, b: YTSMovieList) {
-            return b.year - a.year;
-          });
-          setMovies(movieList);
-        } else {
-          setMovies(movieList);
-        }
-        setLoading(true);
-      })
-      .catch(err => console.log(err));
-  }, [genre]);
+  const goDetail = useCallback(
+    (id: number) => {
+      navigation.navigate('Detail', {id: id});
+    },
+    [navigation],
+  );
 
   useEffect(() => {
-    getMovies();
-  }, [getMovies]);
+    async function fetchData() {
+      const movieList = await getMovies(genre);
+      setMovies(movieList);
+      setLoading(true);
+    }
+    fetchData();
+
+    return () => {
+      setMovies([]);
+      setLoading(false);
+    };
+  }, [genre]);
 
   if (!loading) {
     return <Loading />;
   }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{genre.toUpperCase()} Movie List</Text>

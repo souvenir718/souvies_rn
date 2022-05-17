@@ -1,17 +1,20 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {YTSMovieList} from '../types';
 import {omitTitle} from '../utils';
-import {Movie} from './Movies';
 
 type Props = {
-  movie: Movie;
+  movie: YTSMovieList;
   goDetail: (id: number) => void;
   idx: number;
 };
 
-export default function MovieItem({movie, goDetail, idx}: Props) {
+const MovieItem = React.memo(({movie, goDetail, idx}: Props) => {
+  const onPress = () => {
+    goDetail(movie.id);
+  };
   return (
-    <TouchableOpacity onPress={() => goDetail(movie.id)} key={movie.id}>
+    <TouchableOpacity onPress={onPress} key={movie.id}>
       <View style={styles.movie_container}>
         <Text style={styles.movie_rank}>{idx + 1}</Text>
         <Image
@@ -24,7 +27,7 @@ export default function MovieItem({movie, goDetail, idx}: Props) {
       </View>
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   movie_container: {
@@ -53,3 +56,5 @@ const styles = StyleSheet.create({
     width: 150,
   },
 });
+
+export default MovieItem;

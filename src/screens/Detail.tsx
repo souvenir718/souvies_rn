@@ -9,12 +9,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import axios from 'axios';
 import {MovieDetail} from '../types';
 import Loading from '../components/Loading';
 import {observer} from 'mobx-react';
 import {RootStackParamList} from '../navigation/RootStack';
 import bookmarkStore from '../stores/bookmark';
+import {getMovie} from '../api';
 
 type DetailScreenRouteProp = RouteProp<RootStackParamList, 'Detail'>;
 
@@ -29,15 +29,6 @@ function Detail() {
   const [loading, setLoading] = useState<boolean>(false);
   const [check, setCheck] = useState<boolean>(false);
 
-  const getMovie = useCallback(() => {
-    axios
-      .get(`https://yts.mx/api/v2/movie_details.json?movie_id=${id}`)
-      .then(({data}) => {
-        setMovie(data.data.movie);
-        setLoading(true);
-      });
-  }, [id]);
-
   const onPress = (_movie: MovieDetail) => {
     setBookmarkList(_movie, !check);
     setCheck(prevCheck => !prevCheck);
@@ -51,12 +42,18 @@ function Detail() {
   }, [bookmarkList, id]);
 
   useEffect(() => {
-    getMovie();
-  }, [getMovie]);
+    async function fetchData() {
+      const movieData = await getMovie(id);
+      setMovie(movieData);
+      setLoading(true);
+    }
+    fetchData();
+  }, [id]);
 
   useEffect(() => {
     checkBookmarkList();
   }, [checkBookmarkList, bookmarkList, id]);
+
   if (!loading) {
     return <Loading />;
   }

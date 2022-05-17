@@ -43,6 +43,10 @@ function BookmarkItem({
     deleteBookmark(bookmark);
   };
 
+  const onChangeText = (value: string) => {
+    setText(value);
+  };
+
   return (
     <View style={styles.bookmark_container} key={bookmark.id}>
       <TouchableOpacity style={styles.cancel} onPress={deleteItem}>
@@ -65,7 +69,7 @@ function BookmarkItem({
               placeholder="comment here!"
               placeholderTextColor="rgba(0,0,0,0.5)"
               value={text}
-              onChangeText={setText}
+              onChangeText={onChangeText}
             />
             <TouchableOpacity
               style={styles.input_btn_container}
